@@ -1,0 +1,20 @@
+table.dataTable thead th {
+  border-bottom: 0px solid #f9f9f9;
+}
+table.dataTable.no-footer {
+  border-bottom: 0 !important;
+}
+.dataTables_filter {
+  background-color: aquamarine;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+  color: #60a5fa !important;
+  border: 1px solid #60a5fa !important;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  float: right;
+  text-align: right;
+  background-color: red;
+}

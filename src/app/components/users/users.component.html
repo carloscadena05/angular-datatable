@@ -1,0 +1,70 @@
+<div class="flex shadow-inner">
+  <div class="mx-auto p-4">
+    <form (submit)="filterById()" class="py-2">
+      <div class="flex space-x-4">
+        <div class="basis-1/4">
+          <label>
+            Min
+          </label>
+        </div>
+        <div class="basis-1/4">
+          <label>
+            Max
+          </label>
+        </div>
+      </div>
+      <div class="flex space-x-4">
+        <div class="basis-1/4">
+            <input type="number" name="min" id="min" [(ngModel)]="min" class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white">
+        </div>
+        <div class="basis-1/4">
+            <input type="number" name="max" id="max" [(ngModel)]="max" class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white">
+        </div>
+        <div>
+          <button class="bg-teal-400 py-2 px-4 rounded-md font-medium text-white hover:bg-teal-400/80 duration-300">Filter by ID</button>
+        </div>
+        <div>
+          <a routerLink="/agregar">
+            <button class="bg-blue-400 py-2 px-4 rounded-md font-medium text-white hover:bg-blue-400/80 duration-300">Agregar nuevo registro</button>
+          </a>
+        </div>
+      </div>
+    </form>
+
+    <table id="users" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border order-column nowrap">
+      <thead class="bg-teal-400 font-medium text-white">
+        <tr>
+          <th class="rounded-tl-md hidden">ID</th>
+          <th class="rounded-tl-md">IMG</th>
+          <th>Nombre(s)</th>
+          <th>Apellido Paterno</th>
+          <th>Apellido Materno</th>
+          <th>Email</th>
+          <th>Sexo</th>
+          <th>Estado</th>
+          <th>Texto</th>
+          <th>Fecha</th>
+          <th class="rounded-tr-md">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="p-4">
+        <tr *ngFor="let user of allUsers; let iControl=index" class="odd:bg-gray-100 even:bg-gray-50 hover:bg-blue-400/10">
+          <td class="font-extralight py-8 my-8 hidden">{{ user.id }}</td>
+          <td class="font-extralight h-10 w-8"><img src="{{ assets + user.img }}" class="object-cover h-10 w-full rounded-full overflow-hidde"></td>
+          <td class="font-extralight">{{ user.nombre }}</td>
+          <td class="font-extralight">{{ user.apellido_p }}</td>
+          <td class="font-extralight">{{ user.apellido_m }}</td>
+          <td class="font-extralight">{{ user.email }}</td>
+          <td class="font-extralight">{{ user.sexo | titlecase }}</td>
+          <td class="font-extralight">{{ user.estado }} </td>
+          <td class="font-extralight">{{ user.texto }}</td>
+          <td class="font-extralight">{{ user.fecha }}</td>
+          <td class="space-x-4 space-y-2">
+            <a routerLink="/editar/{{user.id}}" class="rounded-md border border-teal-400 text-teal-400 py-2 px-4 hover:bg-teal-400/10 duration-300">Editar</a>
+            <a (click)="borrarRegistro(user.id,iControl)" role="button" class="rounded-md border border-red-400 text-red-400 py-2 px-4 hover:bg-red-400/10 duration-300">Borrar</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
