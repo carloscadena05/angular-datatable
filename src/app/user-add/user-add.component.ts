@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UsersService } from '../services/users/users.service';
+import { first } from 'rxjs/operators';
+import { UsersService } from '../services/users.service';
 @Component({
   selector: 'app-user-add',
   templateUrl: './user-add.component.html',
@@ -16,11 +17,20 @@ export class UserAddComponent implements OnInit {
   ip="http://localhost/crud/";
   options: any = [];
   estadoInd: any;
+  validData: boolean = false;
+  documentList: any[] = [];
+  selectedFile: any;
+  allDocs: any = [];
+  myFiles: string [] = [];
+  star: any;
+  rating: any;
 
-  constructor(public formulario: FormBuilder,
+  constructor(
+    public formulario: FormBuilder,
     private service:UsersService,
     private ruteador: Router,
-    private http: HttpClient) {
+    private http: HttpClient
+    ) {
       this.form = this.formulario.group({
         nombre:[''],
         apellido_p:[''],
@@ -31,6 +41,7 @@ export class UserAddComponent implements OnInit {
         estado:[''],
         texto:[''],
         fecha:[''],
+        star:[''],
       })
      }
 
@@ -38,17 +49,31 @@ export class UserAddComponent implements OnInit {
     this.estados();
   }
 
-  enviarDatos():any{
-    //console.log(this.file_data.value)
-    this.http.post(this.ip,this.file_data)
-      .subscribe(res => {
-      }, (err) => {
-      });
-    //console.log(this.form.value)
-    this.service.APIService('insertar',null,this.form.value).subscribe(resp=>{
-      //console.log(resp);
+  vFilesChange(event: any) {
+    this.selectedFile = <File>event.target.files[0];
+    this.documentList = event.target.files;
+    for (var i = 0; i < event.target.files.length; i++) {
+      this.myFiles.push(event.target.files[i]);
+    }
+  }
+
+  onRateChange(rating: number){
+    this.star = rating;
+    this.form.setValue({
+      star: this.star
     });
-    this.ruteador.navigateByUrl('/');
+  }
+
+  enviarDatos():any{
+    this.form.value.star = this.star;
+    console.log(this.form.value)
+    this.service.APIService('insertar',null,this.form.value).subscribe(resp=>{
+      console.log(resp);
+      this.ruteador.navigate(['/login']);
+    }, error => {
+      console.log(error);
+    });
+
   }
 
   estados():void {

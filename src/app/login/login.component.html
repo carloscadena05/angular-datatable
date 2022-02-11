@@ -1,0 +1,35 @@
+<div class="flex font-normal h-screen">
+  <div class="m-auto text-black p-4">
+    <form method="post" [formGroup]="login" (ngSubmit)="enviarDatos()" ngNativeValidate>
+      <div class="w-full grid-cols-2 p-8 rounded-md bg-white shadow-md">
+        <p class="text-3xl">Iniciar Sesión</p>
+        <div class="p-2">
+          <div class="h-24 w-24 mx-auto overflow-hidden rounded-full">
+            <img [src]=" foto || unknown " class="object-cover h-24 w-full rounded-full overflow-hidden">
+          </div>
+        </div>
+        <div>
+          <mat-form-field>
+            <input matInput type="email" class="focus:ring-transparent" placeholder="Ingresa tu correo electrónico" formControlName="email" (change)="consultarFoto($event)">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <input matInput type="password" class="focus:ring-transparent" placeholder="Ingresa tu contraseña" formControlName="pwd">
+          </mat-form-field>
+        </div>
+        <div class="py-1">
+          <label>¿No tienes cuenta? <a routerLink="/agregar">Regístrate</a></label>
+        </div>
+        <div class="py-1">
+          <mat-error *ngIf="validData">
+            Datos incorrectos.
+          </mat-error>
+        </div>
+        <div class="py-1">
+          <button class="bg-teal-400 hover:bg-teal-400/80 duration-300 text-white p-2 rounded-md" type="submit">Iniciar sesión</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

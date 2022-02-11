@@ -9,7 +9,17 @@ import { UsersComponent } from './components/users/users.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserAddComponent } from './user-add/user-add.component';
-import { SelectDropDownModule } from 'ngx-select-dropdown'
+import { SelectDropDownModule } from 'ngx-select-dropdown';
+import { LoginComponent } from './login/login.component'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button'
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import { MatRadioModule } from '@angular/material/radio'
+import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 @NgModule({
@@ -18,6 +28,8 @@ import { SelectDropDownModule } from 'ngx-select-dropdown'
     UsersComponent,
     UserEditComponent,
     UserAddComponent,
+    LoginComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -27,8 +39,18 @@ import { SelectDropDownModule } from 'ngx-select-dropdown'
     FormsModule,
     ReactiveFormsModule,
     SelectDropDownModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    NgbModule,
+    MatRadioModule,
+    MatCardModule,
+    MatDatepickerModule
   ],
-  providers: [],
+  providers: [
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }
+  ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

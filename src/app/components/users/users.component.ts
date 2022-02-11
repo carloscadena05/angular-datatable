@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { UsersService } from 'src/app/services/users/users.service';
-
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-users',
@@ -21,6 +20,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   min: any = 0;
   max: any = 100;
+  rating: any = [];
 
   constructor( private service: UsersService ) {
     const Protocol = window.location.protocol;
@@ -117,10 +117,14 @@ export class UsersComponent implements OnInit, OnDestroy {
   users():void {
     this.service.APIService('users').subscribe((response: any) => {
       this.allUsers = response;
-      //console.log(this.allUsers);
       this.dtTrigger.next();
+      for(let i = 0; i < this.allUsers.length; i++){
+        this.rating[i] = response[i]['star'];
+        //console.log(this.rating[i])
+      }
     });
   }
+
 
   borrarRegistro(id:any,iControl:any){
     //console.log(id);

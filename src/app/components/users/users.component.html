@@ -1,32 +1,19 @@
 <div class="flex shadow-inner">
-  <div class="mx-auto p-4">
-    <form (submit)="filterById()" class="py-2">
+  <div class="m-auto p-8 rounded-md bg-white shadow-md">
+    <form (submit)="filterById()" >
       <div class="flex space-x-4">
-        <div class="basis-1/4">
-          <label>
-            Min
-          </label>
+        <div class="basis-1/8">
+          <mat-form-field>
+            <input matInput type="number" name="min" id="min" [(ngModel)]="min" placeholder="Ingresa el registro mínimo">
+          </mat-form-field>
         </div>
-        <div class="basis-1/4">
-          <label>
-            Max
-          </label>
-        </div>
-      </div>
-      <div class="flex space-x-4">
-        <div class="basis-1/4">
-            <input type="number" name="min" id="min" [(ngModel)]="min" class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white">
-        </div>
-        <div class="basis-1/4">
-            <input type="number" name="max" id="max" [(ngModel)]="max" class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white">
+        <div class="basis-1/8">
+          <mat-form-field>
+            <input matInput type="number" name="max" id="max" [(ngModel)]="max" placeholder="Ingresa el registro máximo">
+          </mat-form-field>
         </div>
         <div>
-          <button class="bg-teal-400 py-2 px-4 rounded-md font-medium text-white hover:bg-teal-400/80 duration-300">Filter by ID</button>
-        </div>
-        <div>
-          <a routerLink="/agregar">
-            <button class="bg-blue-400 py-2 px-4 rounded-md font-medium text-white hover:bg-blue-400/80 duration-300">Agregar nuevo registro</button>
-          </a>
+          <button class="bg-teal-400 hover:bg-teal-400/80 duration-300 text-white p-2 rounded-md" type="submit">Filtrar por ID</button>
         </div>
       </div>
     </form>
@@ -35,22 +22,27 @@
       <thead class="bg-teal-400 font-medium text-white">
         <tr>
           <th class="rounded-tl-md hidden">ID</th>
-          <th class="rounded-tl-md">IMG</th>
-          <th>Nombre(s)</th>
-          <th>Apellido Paterno</th>
-          <th>Apellido Materno</th>
-          <th>Email</th>
-          <th>Sexo</th>
-          <th>Estado</th>
-          <th>Texto</th>
-          <th>Fecha</th>
-          <th class="rounded-tr-md">Acciones</th>
+          <th class="rounded-tl-md text-center">IMG</th>
+          <th class="text-center">Nombre(s)</th>
+          <th class="text-center">Apellido Paterno</th>
+          <th class="text-center">Apellido Materno</th>
+          <th class="text-center">Email</th>
+          <th class="text-center">Sexo</th>
+          <th class="text-center">Estado</th>
+          <th class="text-center">Texto</th>
+          <th class="text-center">Fecha</th>
+          <th class="text-center">Estrellas</th>
+          <th class="rounded-tr-md text-center">Acciones</th>
         </tr>
       </thead>
       <tbody class="p-4">
         <tr *ngFor="let user of allUsers; let iControl=index" class="odd:bg-gray-100 even:bg-gray-50 hover:bg-blue-400/10">
-          <td class="font-extralight py-8 my-8 hidden">{{ user.id }}</td>
-          <td class="font-extralight h-10 w-8"><img src="{{ assets + user.img }}" class="object-cover h-10 w-full rounded-full overflow-hidde"></td>
+          <td class="font-extralight hidden">{{ user.id }}</td>
+          <td class="font-extralight">
+            <div class="h-8 w-8 overflow-hidden rounded-full">
+              <img src="{{ user.img ? assets + user.img : assets + 'unknown.png'}}" class="object-cover h-8 w-full rounded-full overflow-hidde">
+            </div>
+          </td>
           <td class="font-extralight">{{ user.nombre }}</td>
           <td class="font-extralight">{{ user.apellido_p }}</td>
           <td class="font-extralight">{{ user.apellido_m }}</td>
@@ -59,6 +51,11 @@
           <td class="font-extralight">{{ user.estado }} </td>
           <td class="font-extralight">{{ user.texto }}</td>
           <td class="font-extralight">{{ user.fecha }}</td>
+          <td><ngb-rating
+            [rate]=rating[iControl]
+            [readonly]="true"
+            [max]="5">
+          </ngb-rating></td>
           <td class="space-x-4 space-y-2">
             <a routerLink="/editar/{{user.id}}" class="rounded-md border border-teal-400 text-teal-400 py-2 px-4 hover:bg-teal-400/10 duration-300">Editar</a>
             <a (click)="borrarRegistro(user.id,iControl)" role="button" class="rounded-md border border-red-400 text-red-400 py-2 px-4 hover:bg-red-400/10 duration-300">Borrar</a>

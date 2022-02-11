@@ -1,92 +1,76 @@
-<div class="flex font-normal">
-  <div class="mx-auto text-black">
-    <form action="index.php" method="post" class="p-4" enctype="multipart/form-data" (ngSubmit)="enviarDatos()" [formGroup]="form" ngNativeValidate>
-      <p class="text-4xl py-4">Agregar</p>
-      <label for="text">Nombre</label>
-          <input
-            type="text" formControlName="nombre" required
-            class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white"/>
+<div class="flex p-4">
+  <div class="m-auto text-black">
+    <form action="index.php" method="post" class="p-8 rounded-md bg-white shadow-md" enctype="multipart/form-data" (ngSubmit)="enviarDatos()" [formGroup]="form" ngNativeValidate>
+      <p class="text-3xl">Registro</p>
       <div class="flex flex-row space-x-4">
-        <div class="basis-1/2">
-          <label for="text">Apellido Paterno</label>
-          <input
-            type="text" formControlName="apellido_p"
-            class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white"/>
-        </div>
-        <div class="basis-1/2">
-          <label for="text">Apellido Materno</label>
-          <input
-            type="text" formControlName="apellido_m"
-            class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white"/>
-        </div>
-
-      </div>
-      <div class="w-full grid-cols-2">
-        <div class="flex flex-row space-x-4">
-          <div class="basis-1/2">
-            <label for="email">Email</label>
-            <input
-              type="email" formControlName="email" required
-              class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white"/>
-          </div>
-          <div class="basis-1/2">
-            <label for="contraseña">Contraseña</label>
-            <input
-              type="password" formControlName="pwd" required
-              class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white"/>
-          </div>
-        </div>
         <div>
-          <label for="fecha">Fecha de Nacimiento</label>
-          <input
-            type="date" formControlName="fecha" required
-            class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white"/>
+          <mat-label>Rating</mat-label>
         </div>
-        <div class="w-full">
-
-          <div class="grid grid-cols-2">
-            <div>
-              <div><label>Sexo</label></div>
-              <div class="grid grid-cols-2">
-                <div>
-                  <label for="radio">Hombre</label>
-                  <input
-                    type="radio" formControlName="sexo" value="hombre"
-                    class="rounded-full bg-gray-100 border-transparent text-teal-400"/>
-                </div>
-              <div>
-                <label for="radio">Mujer</label>
-                <input
-                  type="radio" formControlName="sexo" value="mujer"
-                  class="rounded-full bg-gray-100 border-transparent text-teal-400"/>
-              </div>
-              </div>
-            </div>
-            <div>
-              <label for="estado">Estado</label>
-              <select formControlName="estado" placeholder="Selecciona un estado"
-              class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white">
-                <option *ngFor="let estado of options" value="{{estado.id}}">
-                  {{estado.estado}}
-                </option>
-              </select>
-            </div>
+      </div>
+      <div class="flex flex-row space-x-4">
+        <div class="flex h-12 w-full">
+          <div class="m-auto">
+            <ngb-rating
+              [(rate)]="star"
+              [readonly]="false"
+              [max]="5"
+              [formControlName]="star"
+              (rateChange)="onRateChange($event)">
+            </ngb-rating>
           </div>
         </div>
-
-        <div>
-          <label for="textarea">Text area</label>
-          <textarea
-            formControlName="texto" required
-            cols="30"
-            rows="5"
-            class="rounded-md w-full bg-gray-100 border-transparent focus:border-teal-400 focus:bg-white"></textarea>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4">
+        <mat-form-field class="col-span-2 md:col-span-1">
+          <input matInput type="text" class="focus:ring-transparent" placeholder="Nombre" formControlName="nombre" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="focus:ring-transparent" placeholder="Apellido Paterno" formControlName="apellido_p">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" class="focus:ring-transparent" placeholder="Apellido Materno" formControlName="apellido_m">
+        </mat-form-field>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <mat-form-field>
+          <input matInput type="email" class="focus:ring-transparent" placeholder="Email" formControlName="email" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="password" class="focus:ring-transparent" placeholder="Contraseña" formControlName="pwd" required>
+        </mat-form-field>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4">
+        <div class="col-span-2 md:col-span-1">
+          <div>
+            <mat-label class="text-xs font-thin">Sexo</mat-label>
+          </div>
+          <mat-radio-group formControlName="sexo" aria-label="Sexo" class="grid grid-cols-2" required>
+            <mat-radio-button value="hombre">Hombre</mat-radio-button>
+            <mat-radio-button value="mujer">Mujer</mat-radio-button>
+          </mat-radio-group>
         </div>
 
+        <mat-form-field>
+          <mat-label class="text-xs font-thin">Fecha de nacimiento</mat-label>
+          <input matInput type="date" class="focus:ring-transparent" placeholder="Fecha de nacimiento" formControlName="fecha" required>
+        </mat-form-field>
+        <mat-form-field>
+          <select matNativeControl formControlName="estado" class="focus:ring-transparent" placeholder="Selecciona un estado" required>
+            <option *ngFor="let estado of options" value="{{estado.id}}">
+              {{estado.estado}}
+            </option>
+          </select>
+        </mat-form-field>
       </div>
-      <div class="space-x-4 py-4">
-        <button class="rounded-md border border-teal-400 text-teal-400 py-2 px-4 hover:bg-teal-400/10" type="submit">Agregar</button>
-        <button class="rounded-md border border-blue-400 text-blue-400 py-2 px-4 hover:bg-blue-400/10" type="button" routerLink="/">Cancelar</button>
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Área de texto</mat-label>
+          <textarea matInput formControlName="texto" class="focus:ring-transparent" required></textarea>
+        </mat-form-field>
+      </div>
+      <div class="space-x-4">
+        <button class="rounded-md border border-teal-400 text-teal-400 py-2 px-4 hover:bg-teal-400/10" type="submit">Registrar</button>
+        <button class="rounded-md border border-blue-400 text-blue-400 py-2 px-4 hover:bg-blue-400/10" type="button" routerLink="/login">Cancelar</button>
       </div>
     </form>
   </div>
