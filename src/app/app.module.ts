@@ -21,7 +21,6 @@ import { MatRadioModule } from '@angular/material/radio'
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,10 +45,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     NgbModule,
     MatRadioModule,
     MatCardModule,
-    MatDatepickerModule
+    MatDatepickerModule,
   ],
   providers: [
-    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
   ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

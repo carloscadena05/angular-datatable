@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { UsersService } from './services/users.service';
 
 @Component({
@@ -12,24 +13,20 @@ export class AppComponent {
   btn_logout: boolean = true;
   userDisplayname = '';
 
-  constructor( private service: UsersService) {
-    service.getLoggedInName.subscribe( name => {
-      //console.log(name);
-      this.changeName(name)
-    });
+  constructor( private service: UsersService,
+    private router: Router) {
+      service.getLoggedInName.subscribe( name => {
+        this.changeName(name)
+      });
 
-    if(this.service.isLoggedIn()){
-      //console.log("loggedin");
-      this.btn_login = false;
-      this.btn_logout = true;
-    } else {
-      this.btn_login = true;
-      this.btn_logout = false;
+      if(this.service.isLoggedIn()){
+        this.btn_login = false;
+        this.btn_logout = true;
+      } else {
+        this.btn_login = true;
+        this.btn_logout = false;
+      }
     }
-    //console.log('login',this.btn_login);
-    //console.log('logout',this.btn_logout);
-
-  }
 
   private changeName(name: boolean): void {
     this.btn_logout = name;
@@ -41,5 +38,6 @@ export class AppComponent {
     window.location.href = window.location.href;
     this.btn_login = true;
     this.btn_logout = false;
+    this.router.navigate(['/login']);
   }
 }

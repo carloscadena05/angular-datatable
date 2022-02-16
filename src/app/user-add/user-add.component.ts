@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
 import { UsersService } from '../services/users.service';
+
 @Component({
   selector: 'app-user-add',
   templateUrl: './user-add.component.html',
@@ -24,6 +24,7 @@ export class UserAddComponent implements OnInit {
   myFiles: string [] = [];
   star: any;
   rating: any;
+  emailAlready: boolean = false;
 
   constructor(
     public formulario: FormBuilder,
@@ -49,14 +50,6 @@ export class UserAddComponent implements OnInit {
     this.estados();
   }
 
-  vFilesChange(event: any) {
-    this.selectedFile = <File>event.target.files[0];
-    this.documentList = event.target.files;
-    for (var i = 0; i < event.target.files.length; i++) {
-      this.myFiles.push(event.target.files[i]);
-    }
-  }
-
   onRateChange(rating: number){
     this.star = rating;
     this.form.setValue({
@@ -66,12 +59,17 @@ export class UserAddComponent implements OnInit {
 
   enviarDatos():any{
     this.form.value.star = this.star;
-    console.log(this.form.value)
-    this.service.APIService('insertar',null,this.form.value).subscribe(resp=>{
-      console.log(resp);
-      this.ruteador.navigate(['/login']);
+    //console.log(this.form.value)
+    this.service.APIService('insertar',this.form.value).subscribe(resp=>{
+      //console.log(resp,resp.status);
+      if(resp.status == 1){
+        this.ruteador.navigate(['/login']);
+        this.emailAlready = false;
+      } else if (resp.status == 0){
+        this.emailAlready = true;
+      }
     }, error => {
-      console.log(error);
+      //console.log(error);
     });
 
   }

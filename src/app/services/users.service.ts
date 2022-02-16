@@ -1,48 +1,48 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from '../models/user.model';
-
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  API: string = '';
-  assets: string = '';
   redirectUrl: string;
-  private _loggedInUser?: User;
 
   @Output() getLoggedInName: EventEmitter<any> = new EventEmitter();
+  private loggedUserSubject: BehaviorSubject<any>;
+  getLoggedUser: any;
+  headers: HttpHeaders = new HttpHeaders( { 'Authorization': 'Bearer ' + this.getToken() } );
+  lHeaders: HttpHeaders = new HttpHeaders( { 'Authorization': 'Bearer ' + '*zmaL.qpwO_rknG.uytI.skxN*' })
 
   constructor( public http: HttpClient ) {
-    const Protocol = window.location.protocol;
-    if (window.location.hostname === 'localhost') {
-      this.API = Protocol + '//localhost/crud/';
-      this.assets = Protocol + '//localhost/crud/docs/';
-    } else {
-      this.API = Protocol + '//aaaa.com.mx/crud/';
-      this.assets = Protocol + '//aaaa.com.mx/crud/docs/';
-    }
+
   }
 
-  public userLogin(accion:any, email: any, pwd: any) {
-    //console.log(this.API+"?opcion="+accion, {email, pwd});
-    return this.http.post(this.API+"?opcion="+accion, {email, pwd}).pipe(map((User: any) => {
-      //alert(email);
-      this.setToken(User[0].nombre);
-      this.getLoggedInName.emit(User[0].nombre);
+  userLogin(accion:any, datos: any,) {
+    //console.log(environment.API+"?opcion="+accion, datos, { headers: this.lHeaders } );
+    return this.http.post(environment.API+"?opcion="+accion, datos, { headers: this.lHeaders } ).pipe(map((usuario: any) => {
+      this.setToken(usuario['token']);
+      this.getLoggedInName.emit(usuario['token']);
       this.getToken();
-      return User;
+      return usuario;
     }));
   }
 
-  APIService(accion: any, id?:any, datos?:any):Observable<any>{
-    //console.log(this.API+"?opcion="+accion+"&id="+id,datos);
-    return this.http.post(this.API+"?opcion="+accion+"&id="+id,datos).pipe(map((User) => {
-      return User;
-    }));
+  APIService(accion: any, datos?:any, id?:any):Observable<any>{
+
+    if(id){
+      //console.log(environment.API+"?opcion="+accion+"&id="+id,datos,{ headers: this.headers});
+      return this.http.post(environment.API+"?opcion="+accion+"&id="+id,datos,{ headers: this.headers}).pipe(map((usuario) => {
+        return usuario;
+      }));
+    } else {
+      //console.log(environment.API+"?opcion="+accion,datos,{ headers: this.headers});
+      return this.http.post(environment.API+"?opcion="+accion,datos,{ headers: this.headers}).pipe(map((usuario) => {
+        return usuario;
+      }));
+    }
   }
 
   setToken(token: string) {

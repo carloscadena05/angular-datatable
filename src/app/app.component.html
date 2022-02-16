@@ -1,12 +1,12 @@
-<div class="bg-gradient-to-r from-teal-400/80 to-blue-400/80">
+<div class="bg-gradient-to-r from-teal-400/80 to-blue-400/80 ">
   <div class="h-screen flex flex-col">
     <nav class="flex w-screen h-16 shadow-sm bg-white" *ngIf="btn_logout">
       <div class="m-auto">
         <div class="space-x-16 font-medium text-lg text-teal-400">
-          <a class="hover:underline hover:decoration-2 hover:underline-offset-2" *ngIf="btn_login" routerLink="/login">Iniciar Sesion</a>
-          <a class="cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-2" (click)="logout()">Cerrar Sesion</a>
-          <a class="hover:underline hover:decoration-2 hover:underline-offset-2" *ngIf="btn_login" routerLink="/agregar">Registrar</a>
-          <a class="hover:underline hover:decoration-2 hover:underline-offset-2" routerLink="">Listado</a>
+          <a class="focus:ring-transparent hover:underline hover:decoration-2 hover:underline-offset-2" *ngIf="btn_login" routerLink="/login">Iniciar Sesion</a>
+          <a class="focus:ring-transparent cursor-pointer hover:underline hover:decoration-2 hover:underline-offset-2" (click)="logout()">Cerrar Sesion</a>
+          <a class="focus:ring-transparent hover:underline hover:decoration-2 hover:underline-offset-2" *ngIf="btn_login" routerLink="/agregar">Registrar</a>
+          <a class="focus:ring-transparent hover:underline hover:decoration-2 hover:underline-offset-2" routerLink="">Listado</a>
         </div>
       </div>
     </nav>

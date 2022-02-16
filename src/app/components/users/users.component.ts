@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { UsersService } from 'src/app/services/users.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-users',
@@ -15,23 +16,13 @@ export class UsersComponent implements OnInit, OnDestroy {
   @ViewChild(DataTableDirective, {static: false})
   datatableElement: any = DataTableDirective;
   fotos: any;
-  API: string = '';
   assets: string = '';
 
   min: any = 0;
   max: any = 100;
   rating: any = [];
 
-  constructor( private service: UsersService ) {
-    const Protocol = window.location.protocol;
-    if (window.location.hostname === 'localhost') {
-      this.API = Protocol + '//localhost/crud/';
-      this.assets = Protocol + '//localhost/crud/docs/';
-    } else {
-      this.API = Protocol + '//aaaa.com.mx/crud/';
-      this.assets = Protocol + '//aaaa.com.mx/crud/docs/';
-    }
-  }
+  constructor( private service: UsersService ) { }
 
   ngOnInit(): void {
     this.users();
@@ -115,22 +106,24 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   users():void {
+    this.assets = environment.assets;
     this.service.APIService('users').subscribe((response: any) => {
+      //console.log(response);
       this.allUsers = response;
       this.dtTrigger.next();
       for(let i = 0; i < this.allUsers.length; i++){
         this.rating[i] = response[i]['star'];
         //console.log(this.rating[i])
       }
+    },(error: any) => {
+      //console.log(error);
     });
   }
 
 
   borrarRegistro(id:any,iControl:any){
-    //console.log(id);
-    //console.log(iControl);
     if(window.confirm("¿Desea borrar el registro?")){
-      this.service.APIService('borrar',id).subscribe((respuesta)=>{
+      this.service.APIService('borrar', {id: id}).subscribe((respuesta)=>{
         this.allUsers.splice(iControl,1);
       });
     }

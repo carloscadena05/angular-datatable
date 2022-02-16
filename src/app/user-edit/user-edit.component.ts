@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Form, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { UsersService } from '../services/users.service';
 
 @Component({
@@ -17,7 +18,6 @@ export class UserEditComponent implements OnInit {
   imageSrc: any;
   foto: any;
   options: any = [];
-  API: string = '';
   assets: string = '';
   maxSize: boolean = false;
   documentList: any[] = [];
@@ -34,19 +34,10 @@ export class UserEditComponent implements OnInit {
     private ruteador:Router,
   ) {
 
-    const Protocol = window.location.protocol;
-    if (window.location.hostname === 'localhost') {
-      this.API = Protocol + '//localhost/crud/';
-      this.assets = Protocol + '//localhost/crud/docs/';
-    } else {
-      this.API = Protocol + '//aaaa.com.mx/crud/';
-      this.assets = Protocol + '//aaaa.com.mx/crud/docs/';
-    }
-
     this.elID = this.activateRoute.snapshot.paramMap.get('id');
     //console.log(this.elID);
 
-    this.service.APIService('consultar',this.elID).subscribe(
+    this.service.APIService('consultar',{id: this.elID}).subscribe(
       respuesta=>{
         this.star = respuesta[0]['star'];
         this.form.setValue({
@@ -63,6 +54,8 @@ export class UserEditComponent implements OnInit {
           files:respuesta[0]['files'],
           star:this.star,
         });
+      }, error => {
+        //console.log(error);
       }
 
     );
@@ -130,34 +123,40 @@ export class UserEditComponent implements OnInit {
       for (var i = 0; i < this.myFiles.length; i++) {
         formData.append("file[]", this.myFiles[i]);
       }
-      this.service.APIService('pdf',this.elID,formData).subscribe(res => {
+      this.service.APIService('pdf',formData,this.elID).subscribe(res => {
         //console.log(res);
       },
       error => {
         //console.log(error);
       })
     }
-    this.service.APIService('foto',this.elID,this.file_data).subscribe();
+    this.service.APIService('foto',this.file_data,this.elID).subscribe((respuesta) => {
+      //console.log(respuesta);
+    }, (error) => {
+      //console.log(error);
+    });
     this.form.value.star = this.star;
+    this.form.value.id = this.elID;
     //console.log(this.form.value);
-    this.service.APIService('actualizar',this.elID,this.form.value).subscribe((resp)=>{
+    this.service.APIService('actualizar',this.form.value).subscribe((resp)=>{
       //console.log(resp);
+    },(error) => {
+      //console.log(error);
     });
 
     this.ruteador.navigateByUrl('/');
   }
 
   getFoto():void{
-    this.service.APIService('consultar', this.elID).subscribe( res => {
-      this.foto = this.assets + res[0]['img']
+    this.service.APIService('consultar', {id: this.elID}).subscribe( res => {
+      this.foto = environment.assets + res[0]['img']
     });
   }
 
   getDocs():void {
-    this.service.APIService('consultar', this.elID).subscribe ( respuesta => {
+    this.service.APIService('consultar', {id: this.elID}).subscribe ( respuesta => {
       //console.log(respuesta[0]['docs'])
       this.allDocs = JSON.parse(respuesta[0]['docs']);
-
     });
   }
 

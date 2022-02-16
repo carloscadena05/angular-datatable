@@ -1,8 +1,12 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+const API = window.location.protocol + '//' + window.location.hostname + '/crud/';
+const assets = window.location.protocol + '//' + window.location.hostname + '/crud/docs/';
 
 export const environment = {
+  API: API,
+  assets: assets,
   production: false
 };
 
