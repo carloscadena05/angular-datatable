@@ -4,7 +4,7 @@
       <p class="text-3xl">Registro</p>
       <div class="flex flex-row space-x-4">
         <div>
-          <mat-label>Rating</mat-label>
+          <mat-label class="text-xs font-thin">Rating</mat-label>
         </div>
       </div>
       <div class="flex flex-row space-x-4">
@@ -63,17 +63,16 @@
         </mat-form-field>
       </div>
       <div>
-        <mat-form-field class="example-full-width">
-          <mat-label>Área de texto</mat-label>
-          <textarea matInput formControlName="texto" class="focus:ring-transparent" required></textarea>
-        </mat-form-field>
+        <mat-label class="text-xs font-thin">Área de texto</mat-label>
+        <ckeditor [editor]="Editor" formControlName="texto" class="focus:ring-transparent" required></ckeditor>
       </div>
-      <div *ngIf="emailAlready" class="rounded-md border border-red-400 text-red-400 py-1.5 px-4 hover:bg-red-400/10 duration-300 mb-3">
+      <div *ngIf="emailAlready" class="rounded-md border border-red-400 text-red-400 py-1.5 px-4 mb-3">
         Error al realizar el registro. El correo electrónico ingresado ya está registrado.
       </div>
+      <flash-messages></flash-messages>
       <div class="space-x-4">
-        <button class="rounded-md border border-teal-400 text-teal-400 py-2 px-4 hover:bg-teal-400/10" type="submit">Registrar</button>
-        <button class="rounded-md border border-blue-400 text-blue-400 py-2 px-4 hover:bg-blue-400/10" type="button" routerLink="/login">Cancelar</button>
+        <button mat-raised-button class="rounded-md border border-teal-400 text-teal-400 hover:bg-teal-400/10" type="submit" [class.spinner]="loading" [disabled]="loading">Registrar</button>
+        <button mat-raised-button class="rounded-md border border-blue-400 text-blue-400 hover:bg-blue-400/10" type="button" routerLink="/login">Cancelar</button>
       </div>
     </form>
   </div>

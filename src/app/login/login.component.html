@@ -21,13 +21,20 @@
         <div class="py-1">
           <label>¿No tienes cuenta? <a routerLink="/agregar">Regístrate</a></label>
         </div>
-        <div class="py-1">
-          <mat-error *ngIf="validData">
+        <div *ngIf="invalidData" class="py-1 rounded-md border border-red-400">
+          <mat-error>
             Datos incorrectos.
           </mat-error>
         </div>
+        {{loginAvailable}}
+        <div *ngIf="loginAvailable" class="py-1 rounded-md border border-green-400">
+          <mat-error >
+            Registro exitoso. Ya puedes iniciar sesión.
+          </mat-error>
+        </div>
+
         <div class="py-1">
-          <button class="bg-teal-400 hover:bg-teal-400/80 duration-300 text-white p-2 rounded-md" type="submit">Iniciar sesión</button>
+          <button mat-raised-button [class.spinner]="loading" [disabled]="loading" class="bg-teal-400 hover:bg-teal-400/80 duration-300 text-white rounded-md" type="submit">Iniciar sesión</button>
         </div>
       </div>
     </form>

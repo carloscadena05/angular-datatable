@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Form, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { UsersService } from '../services/users.service';
+import { AppComponent } from '../app.component';
+import Swal from 'sweetalert2';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-user-edit',
@@ -26,17 +29,18 @@ export class UserEditComponent implements OnInit {
   myFiles: string [] = [];
   star: any;
   rating: any;
+  public Editor = ClassicEditor;
+
 
   constructor(
     public formulario:FormBuilder,
     private activateRoute:ActivatedRoute,
     private service: UsersService,
     private ruteador:Router,
+    private appComponent: AppComponent,
   ) {
 
     this.elID = this.activateRoute.snapshot.paramMap.get('id');
-    //console.log(this.elID);
-
     this.service.APIService('consultar',{id: this.elID}).subscribe(
       respuesta=>{
         this.star = respuesta[0]['star'];
@@ -57,7 +61,6 @@ export class UserEditComponent implements OnInit {
       }, error => {
         //console.log(error);
       }
-
     );
 
     this.form=this.formulario.group({
@@ -72,13 +75,30 @@ export class UserEditComponent implements OnInit {
       fecha:[''],
       img:[''],
       star:['']
-    })
+    });
+
+    ClassicEditor.defaultConfig = {
+      toolbar: {
+        items: [
+          'heading', '|',
+          'bold', 'italic', 'link', 'blockQuote', '|',
+          'bulletedList', 'numberedList', '|',
+          'insertTable', '|',
+          'undo', 'redo'
+        ]
+      },
+      width: 'auto',
+      height: 'auto'
+    };
+
    }
 
   ngOnInit(): void {
     this.getFoto();
     this.estados();
     this.getDocs();
+    this.appComponent.btn_logout = true;
+    this.appComponent.btn_login = false;
   }
 
   fileChange(event:any) {
@@ -95,7 +115,6 @@ export class UserEditComponent implements OnInit {
         formData.append('file', file, file.name);
         this.file_data=formData
         //console.log(this.file_data.value)
-
       } else {
         this.maxSize = true;
       }
@@ -137,8 +156,15 @@ export class UserEditComponent implements OnInit {
     });
     this.form.value.star = this.star;
     this.form.value.id = this.elID;
-    //console.log(this.form.value);
+    console.log(this.form.value);
     this.service.APIService('actualizar',this.form.value).subscribe((resp)=>{
+      Swal.fire({
+          text: 'Usuario modificado correctamente.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
+          timerProgressBar: true,
+        });
       //console.log(resp);
     },(error) => {
       //console.log(error);

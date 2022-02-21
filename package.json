@@ -21,6 +21,8 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "@ckeditor/ckeditor5-angular": "^2.0.2",
+    "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
     "@ngneat/tailwind": "^7.0.3",
     "angular-datatables": "^13.0.1",
@@ -35,6 +37,7 @@
     "ngx-cookie-service": "^13.1.2",
     "ngx-select-dropdown": "^2.1.0",
     "rxjs": "~6.6.0",
+    "sweetalert2": "^11.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

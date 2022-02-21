@@ -3,6 +3,9 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { UsersService } from 'src/app/services/users.service';
 import { environment } from 'src/environments/environment';
+import { AppComponent } from '../app.component'
+import Swal from 'sweetalert2';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-users',
@@ -10,6 +13,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit, OnDestroy {
+
   allUsers: any = [];
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject<any>();
@@ -17,12 +21,20 @@ export class UsersComponent implements OnInit, OnDestroy {
   datatableElement: any = DataTableDirective;
   fotos: any;
   assets: string = '';
-
   min: any = 0;
   max: any = 100;
   rating: any = [];
+  texto: any = [];
+  textoError: any;
 
-  constructor( private service: UsersService ) { }
+  private deleteObject = {
+    id: 0,
+    deletedBy: ''
+  }
+  public Editor = ClassicEditor;
+
+  constructor( private service: UsersService,
+    private appComponent: AppComponent  ) { }
 
   ngOnInit(): void {
     this.users();
@@ -75,8 +87,8 @@ export class UsersComponent implements OnInit, OnDestroy {
         paginate:{
           first: '<button class="rounded-md border border-blue-400 text-blue-400 py-2 px-4 hover:bg-blue-400/10 my-2 mr-2">Primera página</button>',
           last: '<button class="rounded-md border border-blue-400 text-blue-400 py-2 px-4 hover:bg-blue-400/10 my-2 mr-2">Última página</button>',
-          next: '<button class="rounded-md text-teal-400 font-extralight">Siguiente</button>',
-          previous: '<button class="rounded-md bext-bteal400 font-extralight">Anterior</button>',
+          next: '<button class="rounded-md border-0 text-teal-400 font-extralight">Siguiente</button>',
+          previous: '<button class="rounded-md border-0 bext-bteal400 font-extralight">Anterior</button>',
         },
         info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
         "searching": false
@@ -92,7 +104,11 @@ export class UsersComponent implements OnInit, OnDestroy {
         (this.min <= id && id <= this.max);
     });
 
+    this.appComponent.btn_logout = true;
+    this.appComponent.btn_login = false;
+
   }
+
 
   filterById(): void{
     this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -108,25 +124,54 @@ export class UsersComponent implements OnInit, OnDestroy {
   users():void {
     this.assets = environment.assets;
     this.service.APIService('users').subscribe((response: any) => {
-      //console.log(response);
+      console.log(response);
       this.allUsers = response;
       this.dtTrigger.next();
       for(let i = 0; i < this.allUsers.length; i++){
         this.rating[i] = response[i]['star'];
+        this.texto[i] = response[i]['texto'];
         //console.log(this.rating[i])
       }
-    },(error: any) => {
-      //console.log(error);
+    }, (error: any) => {
+      console.log(error)
+      this.textoError = error['error']['text'];
     });
   }
 
 
   borrarRegistro(id:any,iControl:any){
-    if(window.confirm("¿Desea borrar el registro?")){
-      this.service.APIService('borrar', {id: id}).subscribe((respuesta)=>{
-        this.allUsers.splice(iControl,1);
-      });
-    }
+    Swal.fire({
+      title: '¿Desea borrar el registro?',
+      confirmButtonText: 'Sí',
+      confirmButtonColor:'#2dd4bf',
+      showDenyButton: true,
+      denyButtonText: 'No',
+      denyButtonColor: '#f87171',
+      icon: 'question',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteObject.id = id;
+        this.deleteObject.deletedBy = this.service.getDataLS('email') as string;
+        this.service.APIService('borrar', JSON.stringify(this.deleteObject)).subscribe((respuesta)=>{
+          //console.log(respuesta);
+          this.allUsers.splice(iControl,1);
+        },(error) => {
+          //console.log(error);
+        });
+        Swal.fire({
+          title: 'Usuario eliminado de manera correcta!',
+          icon:'success',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else if (result.isDenied) {
+        Swal.fire({
+          title: 'Usuario no eliminado',
+          icon: 'info',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    })
   }
-
 }

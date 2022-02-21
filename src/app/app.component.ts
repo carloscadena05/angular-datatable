@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UsersService } from './services/users.service';
 
@@ -9,23 +9,15 @@ import { UsersService } from './services/users.service';
 })
 export class AppComponent {
   title = 'angular-datatable';
-  btn_login: boolean = false;
-  btn_logout: boolean = true;
-  userDisplayname = '';
+  btn_login: boolean;
+  btn_logout: boolean;
+  userName:string;
 
   constructor( private service: UsersService,
     private router: Router) {
       service.getLoggedInName.subscribe( name => {
         this.changeName(name)
       });
-
-      if(this.service.isLoggedIn()){
-        this.btn_login = false;
-        this.btn_logout = true;
-      } else {
-        this.btn_login = true;
-        this.btn_logout = false;
-      }
     }
 
   private changeName(name: boolean): void {
@@ -34,8 +26,13 @@ export class AppComponent {
   }
 
   logout() {
-    this.service.deleteToken();
-    window.location.href = window.location.href;
+    if(this.service.getDataLS('token') && this.service.getDataLS('email') && this.service.getDataLS('nombre')){
+      this.service.deleteDataLS('token');
+      this.service.deleteDataLS('email');
+      this.service.deleteDataLS('nombre');
+    }
+
+    window.location.href = '/login';
     this.btn_login = true;
     this.btn_logout = false;
     this.router.navigate(['/login']);

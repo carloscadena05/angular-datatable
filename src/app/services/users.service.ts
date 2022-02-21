@@ -13,7 +13,7 @@ export class UsersService {
   @Output() getLoggedInName: EventEmitter<any> = new EventEmitter();
   private loggedUserSubject: BehaviorSubject<any>;
   getLoggedUser: any;
-  headers: HttpHeaders = new HttpHeaders( { 'Authorization': 'Bearer ' + this.getToken() } );
+  headers: HttpHeaders = new HttpHeaders( { 'Authorization': 'Bearer ' + this.getDataLS('token') } );
   lHeaders: HttpHeaders = new HttpHeaders( { 'Authorization': 'Bearer ' + '*zmaL.qpwO_rknG.uytI.skxN*' })
 
   constructor( public http: HttpClient ) {
@@ -23,9 +23,11 @@ export class UsersService {
   userLogin(accion:any, datos: any,) {
     //console.log(environment.API+"?opcion="+accion, datos, { headers: this.lHeaders } );
     return this.http.post(environment.API+"?opcion="+accion, datos, { headers: this.lHeaders } ).pipe(map((usuario: any) => {
-      this.setToken(usuario['token']);
+      this.setDataLS('token',usuario['token']);
       this.getLoggedInName.emit(usuario['token']);
-      this.getToken();
+      this.getDataLS('token');
+      this.setDataLS('email',usuario['email']);
+      this.setDataLS('nombre',usuario['nombre']);
       return usuario;
     }));
   }
@@ -45,20 +47,20 @@ export class UsersService {
     }
   }
 
-  setToken(token: string) {
-    localStorage.setItem('token', token);
+  setDataLS(key: string, value: string) {
+    localStorage.setItem(key, value);
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  getDataLS(key: string) {
+    return localStorage.getItem(key) || '';
   }
 
-  deleteToken() {
-    localStorage.removeItem('token');
+  deleteDataLS(key: string) {
+    localStorage.removeItem(key);
   }
 
   isLoggedIn() {
-    const usertoken = this.getToken();
+    const usertoken = this.getDataLS('token');
     if (usertoken != null) {
       //console.log('true')
       return true;

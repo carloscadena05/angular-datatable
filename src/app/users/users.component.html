@@ -13,7 +13,7 @@
           </mat-form-field>
         </div>
         <div>
-          <button class="bg-teal-400 hover:bg-teal-400/80 duration-300 text-white p-2 rounded-md" type="submit">Filtrar por ID</button>
+          <button class="bg-teal-400 border-0 hover:bg-teal-400/80 duration-300 text-white p-2 rounded-md" type="submit">Filtrar por ID</button>
         </div>
       </div>
     </form>
@@ -22,7 +22,7 @@
       <thead class="bg-teal-400 font-medium text-white">
         <tr>
           <th class="rounded-tl-md hidden">ID</th>
-          <th class="rounded-tl-md text-center">IMG</th>
+          <th class="rounded-tl-md text-center w-10">IMG</th>
           <th class="text-center">Nombre(s)</th>
           <th class="text-center">Apellido Paterno</th>
           <th class="text-center">Apellido Materno</th>
@@ -49,7 +49,7 @@
           <td class="font-extralight">{{ user.email }}</td>
           <td class="font-extralight">{{ user.sexo | titlecase }}</td>
           <td class="font-extralight">{{ user.estado }} </td>
-          <td class="font-extralight">{{ user.texto }}</td>
+          <td class="font-extralight"><div [innerHTML]="user.texto | showChar"></div></td>
           <td class="font-extralight">{{ user.fecha }}</td>
           <td><ngb-rating
             [rate]=rating[iControl]
@@ -63,5 +63,10 @@
         </tr>
       </tbody>
     </table>
+    <div class="w-full">
+      <div class="m-auto">
+        <span *ngIf="textoError" class="text-center text-red-400 py-2 px-4">{{textoError}}</span>
+      </div>
+    </div>
   </div>
 </div>

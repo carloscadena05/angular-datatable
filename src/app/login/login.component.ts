@@ -4,6 +4,8 @@ import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
 import { environment } from 'src/environments/environment';
+import { AppComponent } from '../app.component';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-login',
@@ -12,23 +14,28 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginComponent implements OnInit {
   login: FormGroup;
-  validData: boolean = false;
+  invalidData: boolean = false;
   nombre: string;
   foto: any;
   unknown: string = '';
+  loginAvailable: boolean;
+  loading: boolean = false;
 
   constructor( private service: UsersService,
     private fb: FormBuilder,
-    private router: Router ) {
+    private router: Router,
+    private appComponent: AppComponent ) {
       this.login = this.fb.group({
         email: [ '', [Validators.required, Validators.minLength(6), Validators.email ]],
         pwd:['', [Validators.required]],
       });
-
     }
 
   ngOnInit(): void {
     this.unknown = environment.assets + 'unknown.png';
+    this.appComponent.btn_logout = false;
+    this.appComponent.btn_login = true;
+    //console.log('btn_login',this.appComponent.btn_login,'btn_logout',this.appComponent.btn_logout)
   }
 
   consultarFoto(event: any){
@@ -41,15 +48,24 @@ export class LoginComponent implements OnInit {
   }
 
   enviarDatos(){
+    this.loading = true;
     this.service.userLogin('login', this.login.value).pipe(first()).subscribe((data) => {
       //console.log(data);
-      this.validData = false;
-      const redirect = this.service.redirectUrl ? this.service.redirectUrl : '/';
-      this.router.navigate([redirect]);
+      this.invalidData = false;
+      this.appComponent.btn_logout = true;
+      this.appComponent.btn_login = false;
+      Swal.fire({
+        title: 'Inicio de sesión exitoso',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      this.router.navigateByUrl('/');
     },
     (error) => {
       //console.log(error);
-      this.validData = true;
+      this.invalidData = true;
+      this.loading = false;
     });
   }
 
