@@ -55,11 +55,11 @@
           <input matInput type="date" class="focus:ring-transparent" placeholder="Fecha de nacimiento" formControlName="fecha" required>
         </mat-form-field>
         <mat-form-field>
-          <select matNativeControl formControlName="estado" class="focus:ring-transparent" placeholder="Selecciona un estado" required>
-            <option *ngFor="let estado of options" value="{{estado.id}}">
+          <mat-select matNativeControl formControlName="estado" class="focus:ring-transparent" placeholder="Selecciona un estado" maxlength="3" multiple required>
+            <mat-option *ngFor="let estado of options" value="{{estado.id}}">
               {{estado.estado}}
-            </option>
-          </select>
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div>

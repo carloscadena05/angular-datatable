@@ -20,6 +20,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { MatRadioModule } from '@angular/material/radio'
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
 
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { showCharPipe } from './pipes/showPipe.pipe'
@@ -50,6 +51,7 @@ import { showCharPipe } from './pipes/showPipe.pipe'
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSelectModule,
     CKEditorModule,
   ],
   providers: [

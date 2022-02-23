@@ -24,7 +24,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   min: any = 0;
   max: any = 100;
   rating: any = [];
-  texto: any = [];
+  estado: any = [];
   textoError: any;
 
   private deleteObject = {
@@ -124,16 +124,14 @@ export class UsersComponent implements OnInit, OnDestroy {
   users():void {
     this.assets = environment.assets;
     this.service.APIService('users').subscribe((response: any) => {
-      console.log(response);
       this.allUsers = response;
       this.dtTrigger.next();
       for(let i = 0; i < this.allUsers.length; i++){
         this.rating[i] = response[i]['star'];
-        this.texto[i] = response[i]['texto'];
         //console.log(this.rating[i])
       }
     }, (error: any) => {
-      console.log(error)
+      //console.log(error)
       this.textoError = error['error']['text'];
     });
   }

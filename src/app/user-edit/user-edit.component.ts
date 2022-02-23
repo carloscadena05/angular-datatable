@@ -43,6 +43,7 @@ export class UserEditComponent implements OnInit {
     this.elID = this.activateRoute.snapshot.paramMap.get('id');
     this.service.APIService('consultar',{id: this.elID}).subscribe(
       respuesta=>{
+        //console.log(respuesta[0])
         this.star = respuesta[0]['star'];
         this.form.setValue({
           nombre:respuesta[0]['nombre'],
@@ -51,7 +52,7 @@ export class UserEditComponent implements OnInit {
           email:respuesta[0]['email'],
           pwd:respuesta[0]['pwd'],
           sexo:respuesta[0]['sexo'],
-          estado:respuesta[0]['id'],
+          estado:JSON.parse(respuesta[0]['estado']),
           texto:respuesta[0]['texto'],
           fecha:respuesta[0]['fecha'],
           img:respuesta[0]['img'],
@@ -94,9 +95,8 @@ export class UserEditComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.getFoto();
+    this.getFiles();
     this.estados();
-    this.getDocs();
     this.appComponent.btn_logout = true;
     this.appComponent.btn_login = false;
   }
@@ -156,7 +156,6 @@ export class UserEditComponent implements OnInit {
     });
     this.form.value.star = this.star;
     this.form.value.id = this.elID;
-    console.log(this.form.value);
     this.service.APIService('actualizar',this.form.value).subscribe((resp)=>{
       Swal.fire({
           text: 'Usuario modificado correctamente.',
@@ -173,22 +172,16 @@ export class UserEditComponent implements OnInit {
     this.ruteador.navigateByUrl('/');
   }
 
-  getFoto():void{
+  getFiles():void{
     this.service.APIService('consultar', {id: this.elID}).subscribe( res => {
       this.foto = environment.assets + res[0]['img']
-    });
-  }
-
-  getDocs():void {
-    this.service.APIService('consultar', {id: this.elID}).subscribe ( respuesta => {
-      //console.log(respuesta[0]['docs'])
-      this.allDocs = JSON.parse(respuesta[0]['docs']);
+      this.allDocs = JSON.parse(res[0]['docs']);
     });
   }
 
   estados():void {
     this.service.APIService('estados').subscribe((response: any) => {
-      //console.log(response[0]['estado']);
+      //console.log(response);
       this.options = response;
     });
   }

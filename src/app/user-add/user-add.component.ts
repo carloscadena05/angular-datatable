@@ -82,7 +82,7 @@ export class UserAddComponent implements OnInit {
     this.form.value.star = this.star;
     //console.log(this.form.value)
     this.service.APIService('insertar',this.form.value).subscribe(resp=>{
-
+      //console.log(resp);
       //console.log(resp,resp.status);
       if(resp.status == 1){
         Swal.fire({
