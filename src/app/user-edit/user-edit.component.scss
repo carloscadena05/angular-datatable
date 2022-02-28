@@ -12,3 +12,10 @@ ngb-rating{
 .example-full-width {
   width: 100%;
 }
+
+[multiple] {
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 1rem;
+  line-height: 0.001 rem;
+}

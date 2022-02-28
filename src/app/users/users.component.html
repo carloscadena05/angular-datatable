@@ -48,7 +48,7 @@
           <td class="font-extralight">{{ user.apellido_m }}</td>
           <td class="font-extralight">{{ user.email }}</td>
           <td class="font-extralight">{{ user.sexo | titlecase }}</td>
-          <td class="font-extralight">{{ user.estado? user.estado : estado[iControl] }}</td>
+          <td class="font-extralight">{{ user.estado | showChar}}</td>
           <td class="font-extralight"><div [innerHTML]="user.texto | showChar"></div></td>
           <td class="font-extralight">{{ user.fecha }}</td>
           <td><ngb-rating

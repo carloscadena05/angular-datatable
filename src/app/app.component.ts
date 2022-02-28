@@ -12,11 +12,16 @@ export class AppComponent {
   btn_login: boolean;
   btn_logout: boolean;
   userName:string;
+  textoError: string;
 
   constructor( private service: UsersService,
     private router: Router) {
       service.getLoggedInName.subscribe( name => {
         this.changeName(name)
+      });
+      this.service.APIService('users').subscribe((response: any) => {
+      }, (error: any) => {
+        this.textoError = error['error']['text'];
       });
     }
 
@@ -37,4 +42,5 @@ export class AppComponent {
     this.btn_logout = false;
     this.router.navigate(['/login']);
   }
+
 }

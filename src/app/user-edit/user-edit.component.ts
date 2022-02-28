@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -29,8 +29,10 @@ export class UserEditComponent implements OnInit {
   myFiles: string [] = [];
   star: any;
   rating: any;
+  aEstados: any;
+  nombreEstado: any;
   public Editor = ClassicEditor;
-
+  @ViewChild('userEdit') userEdit: ElementRef;
 
   constructor(
     public formulario:FormBuilder,
@@ -43,16 +45,17 @@ export class UserEditComponent implements OnInit {
     this.elID = this.activateRoute.snapshot.paramMap.get('id');
     this.service.APIService('consultar',{id: this.elID}).subscribe(
       respuesta=>{
-        //console.log(respuesta[0])
+      //console.log(respuesta[0])
         this.star = respuesta[0]['star'];
+        this.nombreEstado = respuesta[0]['estado']
         this.form.setValue({
+          estado:JSON.parse(respuesta[0]['estado']),
           nombre:respuesta[0]['nombre'],
           apellido_p:respuesta[0]['apellido_p'],
           apellido_m:respuesta[0]['apellido_m'],
           email:respuesta[0]['email'],
           pwd:respuesta[0]['pwd'],
           sexo:respuesta[0]['sexo'],
-          estado:JSON.parse(respuesta[0]['estado']),
           texto:respuesta[0]['texto'],
           fecha:respuesta[0]['fecha'],
           img:respuesta[0]['img'],
@@ -156,6 +159,7 @@ export class UserEditComponent implements OnInit {
     });
     this.form.value.star = this.star;
     this.form.value.id = this.elID;
+    //console.log(this.form.value)
     this.service.APIService('actualizar',this.form.value).subscribe((resp)=>{
       Swal.fire({
           text: 'Usuario modificado correctamente.',

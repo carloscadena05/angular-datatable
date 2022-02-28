@@ -124,6 +124,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   users():void {
     this.assets = environment.assets;
     this.service.APIService('users').subscribe((response: any) => {
+      //console.log(response)
       this.allUsers = response;
       this.dtTrigger.next();
       for(let i = 0; i < this.allUsers.length; i++){

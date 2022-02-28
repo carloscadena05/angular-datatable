@@ -5,21 +5,67 @@
         <mat-card-title>
           Modificar
         </mat-card-title>
-        <div class="flex h-full">
-          <div class="mx-auto">
-            <label>
-              <div class="h-20 w-20 overflow-hidden bg-teal-400/50 rounded-full">
-                <img [src]=" imageSrc || foto " class="object-cover h-20 w-full rounded-full border-4 border-teal-400 cursor-pointer hover:opacity-75 duration-300"/>
-                <div class="absolute hover:gray-400/20"></div>
-              </div>
-              <div class="invisible hidden">
-                <input type="file" [formControl]="file" name="file" id="file" (change)="fileChange($event)" accept="image/*" class="invisible">
-              </div>
-            </label>
+        <div id="userEdit">
+          <div class="flex">
+            <div class="mx-auto">
+              <label>
+                <div class="h-20 w-20 overflow-hidden bg-teal-400/50 rounded-full">
+                  <img [src]=" imageSrc || foto " class="object-cover h-20 w-full rounded-full border-4 border-teal-400 cursor-pointer hover:opacity-75 duration-300"/>
+                  <div class="absolute hover:gray-400/20"></div>
+                </div>
+                <div class="invisible hidden">
+                  <input type="file" [formControl]="file" name="file" id="file" (change)="fileChange($event)" accept="image/*" class="invisible">
+                </div>
+              </label>
+            </div>
           </div>
-        </div>
-        <div *ngIf="maxSize" class="rounded-md border border-red-400 text-red-400 py-1.5 px-4 hover:bg-red-400/10 duration-300 my-4">
-          El tamaño de la imagen supera 4MB. Inténtalo nuevamente.
+          <div *ngIf="maxSize" class="rounded-md border border-red-400 text-red-400 py-1.5 px-4 hover:bg-red-400/10 duration-300 my-4">
+            El tamaño de la imagen supera 4MB. Inténtalo nuevamente.
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4">
+            <mat-form-field class="col-span-2 md:col-span-1">
+              <input matInput type="text" class="focus:ring-transparent" placeholder="Nombre" formControlName="nombre" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput type="text" class="focus:ring-transparent" placeholder="Apellido Paterno" formControlName="apellido_p">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput type="text" class="focus:ring-transparent" placeholder="Apellido Materno" formControlName="apellido_m">
+            </mat-form-field>
+          </div>
+          <div class="grid grid-cols-1 gap-4">
+            <mat-form-field>
+              <input matInput type="email" class="focus:ring-transparent" placeholder="Email" formControlName="email" required>
+            </mat-form-field>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4">
+            <div class="col-span-2 md:col-span-1">
+              <div>
+                <mat-label class="text-xs font-thin">Sexo</mat-label>
+              </div>
+              <mat-radio-group formControlName="sexo" aria-label="Sexo" class="grid grid-cols-2" required>
+                <mat-radio-button value="hombre">Hombre</mat-radio-button>
+                <mat-radio-button value="mujer">Mujer</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <mat-form-field>
+              <input matInput type="date" class="focus:ring-transparent" placeholder="Fecha de nacimiento" formControlName="fecha" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select matNativeControl formControlName="estado" class="focus:ring-transparent border-none" placeholder="Selecciona un estado" maxlength="3"  multiple required>
+                <mat-option *ngFor="let estado of options" value="{{estado.id}}" class="text-xs">
+                  {{estado.estado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-label class="text-xs font-thin">Área de texto</mat-label>
+            <div class="h-min">
+              <quill-editor formControlName="texto"></quill-editor>
+            </div>
+          </div>
         </div>
         <div class="flex flex-row space-x-4">
           <div class="basis-1/2">
@@ -49,21 +95,14 @@
               </div>
             </div>
           </div>
-
           <div class="flex h-12 w-full basis-1/2">
             <div class="m-auto">
-              <ngb-rating
-                [(rate)]="star"
-                [readonly]="false"
-                [max]="5"
-                [formControlName]="star"
-                (rateChange)="onRateChange($event)">
-              </ngb-rating>
+              <ngb-rating [(rate)]="star" [readonly]="false" [max]="5" [formControlName]="star" (rateChange)="onRateChange($event)"></ngb-rating>
             </div>
           </div>
         </div>
         <div *ngIf="allDocs.length > 0">
-          <label>Archivos subidos</label>
+          <mat-label class="text-xs font-thin">Archivos subidos</mat-label>
           <div class="flex flex-row space-x-4 p-2">
             <div *ngFor="let doc of allDocs" class="basis-1/8">
               <div>
@@ -74,50 +113,10 @@
             </div>
           </div>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4">
-          <mat-form-field class="col-span-2 md:col-span-1">
-            <input matInput type="text" class="focus:ring-transparent" placeholder="Nombre" formControlName="nombre" required>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput type="text" class="focus:ring-transparent" placeholder="Apellido Paterno" formControlName="apellido_p">
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput type="text" class="focus:ring-transparent" placeholder="Apellido Materno" formControlName="apellido_m">
-          </mat-form-field>
-        </div>
-        <div class="grid grid-cols-1 gap-4">
-          <mat-form-field>
-            <input matInput type="email" class="focus:ring-transparent" placeholder="Email" formControlName="email" required>
-          </mat-form-field>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4">
-          <div class="col-span-2 md:col-span-1">
-            <div>
-              <mat-label class="text-xs font-thin">Sexo</mat-label>
-            </div>
-            <mat-radio-group formControlName="sexo" aria-label="Sexo" class="grid grid-cols-2" required>
-              <mat-radio-button value="hombre">Hombre</mat-radio-button>
-              <mat-radio-button value="mujer">Mujer</mat-radio-button>
-            </mat-radio-group>
-          </div>
-          <mat-form-field>
-            <input matInput type="date" class="focus:ring-transparent" placeholder="Fecha de nacimiento" formControlName="fecha" required>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-select matNativeControl formControlName="estado" class="focus:ring-transparent" placeholder="Selecciona un estado" maxlength="3" multiple required>
-              <mat-option *ngFor="let estado of options" value="{{estado.id}}">
-                {{estado.estado}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div>
-          <mat-label class="text-xs font-thin">Área de texto</mat-label>
-          <ckeditor [editor]="Editor" formControlName="texto" required></ckeditor>
-        </div>
         <div class="space-x-4">
           <button class="rounded-md border border-teal-400 text-teal-400 py-2 px-4 hover:bg-teal-400/10" type="submit">Guardar</button>
           <button class="rounded-md border border-blue-400 text-blue-400 py-2 px-4 hover:bg-blue-400/10" type="button" routerLink="/">Cancelar</button>
+          <button printSectionId="userEdit" ngxPrint [useExistingCss]="true" class="rounded-md border border-green-400 text-green-400 py-2 px-4 hover:bg-green-400/10">Generar PDF</button>
         </div>
       </form>
     </mat-card>
